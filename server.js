@@ -14,22 +14,27 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
+const { ExpressPeerServer } = require('peer');
+const peerServer = ExpressPeerServer(server, {
+  debug: true
+});
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/peerjs', peerServer);
 
 const botName = 'ChatCord Bot';
 
 // Run when client connects
 io.on('connection', socket => {
-  socket.on('joinRoom', ({ username, room }) => {
+  socket.on('joinRoom', ({ username, room, id }) => {
     const user = userJoin(socket.id, username, room);
 
     socket.join(user.room);
-
     // Welcome current user
     socket.emit('message', formatMessage(botName, 'Welcome to ChatCord!'));
 
     // Broadcast when a user connects
+    socket.broadcast.to(user.room).emit('user-connected', id);
     socket.broadcast
       .to(user.room)
       .emit(
@@ -42,37 +47,11 @@ io.on('connection', socket => {
       room: user.room,
       users: getRoomUsers(user.room)
     });
-  });
-
-  // Listen for chatMessage
-  socket.on('chatMessage', msg => {
-    const user = getCurrentUser(socket.id);
-
-    io.to(user.room).emit('message', formatMessage(user.username, msg));
-  });
-
-  // Listen for video toogle button
-  socket.on('toogle_play_pause', ({ username, room }) => {
-    console.log(username, room)
-    io.to(room).emit('client_do_toogle_play_pause', '');
-  });
-
-  // Listen for skip button
-  socket.on('skip', (skip_time) => {
-    console.log(skip_time);
-    const user = getCurrentUser(socket.id);
-    io.to(user.room).emit('client_do_skip', skip_time);
-  });
-
-  // Listen for progressbar click
-  socket.on('scrub', ({ username, room, scrubTime }) => {
-    console.log(username, room, scrubTime);
-    io.to(room).emit('client_do_scrub', scrubTime);
-  });
-
-  // Runs when client disconnects
+      // Runs when client disconnects
   socket.on('disconnect', () => {
     const user = userLeave(socket.id);
+
+    socket.broadcast.to(user.room).emit('user-disconnected', id);
 
     if (user) {
       io.to(user.room).emit(
@@ -87,6 +66,37 @@ io.on('connection', socket => {
       });
     }
   });
+  });
+
+  // Listen for chatMessage
+  socket.on('chatMessage', msg => {
+    const user = getCurrentUser(socket.id);
+
+    io.to(user.room).emit('message', formatMessage(user.username, msg));
+  });
+
+  // Listen for video toogle button
+  socket.on('toogle_play_pause', ({method, ctime}) => {
+    const user = getCurrentUser(socket.id);
+    console.log(method, ctime, user.room);
+    io.to(user.room).emit('client_do_toogle_play_pause', {method, ctime});
+  });
+
+  // Listen for skip button
+  socket.on('skip', (skip_time) => {
+    console.log(skip_time);
+    const user = getCurrentUser(socket.id);
+    io.to(user.room).emit('client_do_skip', skip_time);
+  });
+
+  // Listen for progressbar click
+  socket.on('scrub', (scrubTime) => {
+    console.log(scrubTime);
+    const user = getCurrentUser(socket.id);
+    io.to(user.room).emit('client_do_scrub', scrubTime);
+  });
+
+
 });
 
 const PORT = process.env.PORT || 3000;

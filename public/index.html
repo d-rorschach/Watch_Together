@@ -31,15 +31,30 @@
 						/>
 					</div>
 					<div class="form-control">
-						<label for="room">Room</label>
-						<select name="room" id="room">
-							<option value="JavaScript">JavaScript</option>
-							<option value="Python">Python</option>
-							<option value="PHP">PHP</option>
-							<option value="C#">C#</option>
-							<option value="Ruby">Ruby</option>
-							<option value="Java">Java</option>
+						<label for="Select">Select</label>
+						<select id="Select">
+							<option value=1>Create a new room</option>
+							<option value=2>Enter in an existing room</option>
 						</select>
+					</div>
+					<div class="form-control">
+						<label for="room">Room Id</label>
+						<input
+							type="text"
+							name="room"
+							id="room"
+							placeholder="Enter room id"
+							required
+						/>
+					</div>
+					<div class="form-control">
+						<label for="Password">Password</label>
+						<input
+							type="password"
+							id="Password"
+							placeholder="Enter password"
+							required
+						/>
 					</div>
 					<button type="submit" class="btn">Join Chat</button>
 				</form>
