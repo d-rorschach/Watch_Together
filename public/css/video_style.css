@@ -10,16 +10,18 @@ body {
   margin: 0;
   padding: 0;
   display: flex;
-  background: #7A419B;
+  background: #212529;
   min-height: 100vh;
-  background: linear-gradient(135deg, #7c1599 0%,#921099 48%,#7e4ae8 100%);
+  background: linear-gradient(135deg, #231a25 0%,#221e22 48%,#18043f 100%);
   background-size: cover;
   align-items: center;
   justify-content: center;
 }
 
 .player {
-  max-width: 750px;
+  /* max-width: none; */
+  height: 497px;
+  width: 945px; 
   border: 5px solid rgba(0,0,0,0.2);
   box-shadow: 0 0 20px rgba(0,0,0,0.2);
   position: relative;
@@ -46,7 +48,7 @@ body {
   background: none;
   border: 0;
   line-height: 1;
-  color: white;
+  color: black;
   text-align: center;
   outline: 0;
   padding: 0;
@@ -65,6 +67,7 @@ body {
 
 .player__controls {
   display: flex;
+  /* flex-direction: column; */
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -72,6 +75,7 @@ body {
   transition: all .3s;
   flex-wrap: wrap;
   background: rgba(0,0,0,0.1);
+  overflow: visible;
 }
 
 .player:hover .player__controls {
@@ -94,7 +98,7 @@ body {
   height: 5px;
   transition: height 0.3s;
   background: rgba(0,0,0,0.5);
-  cursor: ew-resize;
+  cursor: pointer;
 }
 
 .progress__filled {
@@ -105,7 +109,7 @@ body {
 }
 
 /* unholy css to style input type="range" */
-
+/* 
 input[type=range] {
   -webkit-appearance: none;
   background: transparent;
@@ -159,7 +163,7 @@ input[type=range]::-moz-range-thumb {
   border-radius: 50px;
   background: #ffc600;
   cursor: pointer;
-}
+} */
 
 /* video calling styles */
 
@@ -169,8 +173,8 @@ input[type=range]::-moz-range-thumb {
   flex-wrap: wrap;
 }
 .video_calling{
-  height: 300px;
-  width: 400px;
+  height: 200px;
+  width: 150px;
   object-fit: cover;
   padding: 8px;
 }
@@ -180,12 +184,15 @@ input[type=range]::-moz-range-thumb {
   display: flex;
 }
 
-.main__left {
-  flex: 0.8;
+/* .main__left {
+  flex: 1;
   display: flex;
   flex-direction: column;
-}
+} */
 
+.main {
+  display: block;
+}
 
 .main__videos {
   flex-grow: 1;
@@ -193,7 +200,7 @@ input[type=range]::-moz-range-thumb {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px;
+  /* padding: 10px; */
 }
 
 .main__controls {

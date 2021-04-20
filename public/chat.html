@@ -12,24 +12,45 @@
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/video_style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-
+<script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
 
     <script defer src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
     <script defer src="https://kit.fontawesome.com/c939d0e917.js"></script>
    <script defer src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
    <script defer src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <title>ChatCord App</title>
+   <script defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js"
+      integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4="
+      crossorigin="anonymous"
+    ></script>
+    <script defer src="/socket.io/socket.io.js"></script> 
+    <script defer src="js/main.js"></script>
+
+    <title>Online Streaming</title>
   </head>
   <body>
-    <div class="chat-container">
+    <!-- select video code -->
+    <!-- <div class="form-control">
+			<label for="username">Username</label>
+			<input
+				type="text"
+				id="video_location"
+				placeholder="Enter username..."
+				required
+			/>
+		</div> -->
+    <div style="display: flex; flex-direction:row">
+    <!-- chatcord code -->
+    <div class="chat-container" style="height:100vh">
       <header class="chat-header">
-        <h1><i class="fas fa-smile"></i> ChatCord</h1>
+        <h1><img src="images/chat-app-logo.png" style="width:60px;height:60px"> Watch Together</h1>
         <a id="leave-btn" class="btn">Leave Room</a>
       </header>
       <main class="chat-main">
         <div class="chat-sidebar">
           <h3><i class="fas fa-comments"></i> Room Name:</h3>
           <h2 id="room-name"></h2>
+          
           <h3><i class="fas fa-users"></i> Users</h3>
           <ul id="users"></ul>
         </div>
@@ -50,8 +71,11 @@
     </div>
 
     <!-- video player starts here -->
+    <div style="display: flex; flex-direction:column; justify-content:space-evenly;
+    padding-left:25px;padding-right:25px;">
+
     <div class="player">
-      <video class="player__video viewer" src="652333414.mp4"></video>
+      <video class="player__video viewer" id="movie_player" ></video>
  
       <div class="player__controls">
         <div class="progress">
@@ -68,7 +92,7 @@
 
     <!-- video calling htmls starts here -->
     <div class="main">
-      <div class="main__left">
+      <!-- <div class="main__left"> -->
          <div class="main__videos">
             <div id="video-grid">
       
@@ -86,16 +110,29 @@
                </div>
             </div>
          </div>
-      </div>
+      <!-- </div> -->
+      <!-- video input tag -->
+      <label for="video_location">video_location</label>
+          <input
+            type="text"
+            id="video_location"
+            placeholder="Enter username..."
+            value="./652333414.mp4"
+          />
+          <button type="button" class="btn btn-primary" onclick="setvideosrc()">Submit</button>
    </div>
-
+    </div>
+    </div>
     <!-- <script src="js/video_scripts.js"></script> -->
-    <script defer
-      src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js"
-      integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4="
-      crossorigin="anonymous"
-    ></script>
-    <script defer src="/socket.io/socket.io.js"></script> 
-    <script defer src="js/main.js"></script>
+    
+
   </body>
+  <script>
+    function setvideosrc()
+    {
+      let val=document.getElementById('video_location').value;
+      console.log(val);
+      document.getElementById('movie_player').src= val;
+    }
+  </script>
 </html>

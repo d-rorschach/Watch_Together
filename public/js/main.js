@@ -13,12 +13,12 @@ const skipButtons = player.querySelectorAll('[data-skip]');
 // const ranges = player.querySelectorAll('.player__slider');
 //get our video calling elements
 const videoGrid = document.getElementById('video-grid');
-// const myPeer = new Peer(undefined, {
-//   path: '/peerjs',
-//   host: '/',
-//   port: '3000'
-// })
-const myPeer = new Peer(undefined, { host: "peerjs-server.herokuapp.com", secure: true, port: 443, });
+const myPeer = new Peer(undefined, {
+  path: '/peerjs',
+  host: '/',
+  port: '443'
+});
+// const myPeer = new Peer(undefined, { host: "peerjs-server.herokuapp.com", secure: true, port: 443, });
 let myVideoStream;
 const myVideo = document.createElement('video');
 myVideo.className = 'video_calling';
@@ -40,9 +40,10 @@ navigator.mediaDevices.getUserMedia({
   myVideoStream = stream;
   addVideoStream(myVideo, stream);
 
+  socket.emit('joinRoom', { username, room });
   myPeer.on('open', id => {
-    console.log('joins peer')
-    socket.emit('joinRoom', { username, room, id });
+    socket.emit('join-room', room, id);
+    console.log('peer joins');
   })
 
   myPeer.on('call', call => {
@@ -306,3 +307,7 @@ const setPlayVideo = () => {
   `
   document.querySelector('.main__video_button').innerHTML = html;
 }
+
+
+
+

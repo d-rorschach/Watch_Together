@@ -18,23 +18,23 @@ const { ExpressPeerServer } = require('peer');
 const peerServer = ExpressPeerServer(server, {
   debug: true
 });
-// Set static folder
+
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use('/peerjs', peerServer);
 
 const botName = 'ChatCord Bot';
 
 // Run when client connects
 io.on('connection', socket => {
-  socket.on('joinRoom', ({ username, room, id }) => {
+  socket.on('joinRoom', ({ username, room }) => {
     const user = userJoin(socket.id, username, room);
 
     socket.join(user.room);
     // Welcome current user
-    socket.emit('message', formatMessage(botName, 'Welcome to ChatCord!'));
+    socket.emit('message', formatMessage(botName, 'Welcome to Watch Together!'));
 
     // Broadcast when a user connects
-    socket.broadcast.to(user.room).emit('user-connected', id);
     socket.broadcast
       .to(user.room)
       .emit(
@@ -47,11 +47,15 @@ io.on('connection', socket => {
       room: user.room,
       users: getRoomUsers(user.room)
     });
-      // Runs when client disconnects
+      
+  });
+
+  //peer join room
+  socket.on('join-room', (roomId, userId) => {
+    socket.to(roomId).broadcast.emit('user-connected', userId);
+    // Runs when client disconnects
   socket.on('disconnect', () => {
     const user = userLeave(socket.id);
-
-    socket.broadcast.to(user.room).emit('user-disconnected', id);
 
     if (user) {
       io.to(user.room).emit(
@@ -64,9 +68,12 @@ io.on('connection', socket => {
         room: user.room,
         users: getRoomUsers(user.room)
       });
+      socket.to(user.room).broadcast.emit('user-disconnected', userId);
     }
+    
   });
-  });
+  })
+  
 
   // Listen for chatMessage
   socket.on('chatMessage', msg => {
@@ -98,6 +105,7 @@ io.on('connection', socket => {
 
 
 });
+
 
 const PORT = process.env.PORT || 3000;
 
