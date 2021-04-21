@@ -17,7 +17,7 @@ Watch Video content with all your friends synchronously, Add as many friends as 
 ### <a href="https://watchtogether-node.herokuapp.com/" target="blank">:arrow_forward: Give it a try!!</a>
 
 ## ScreenShots :camera_flash:
-![Screenshot1](Screenshot (33).png) 
+![Screenshot1](wt.png) 
 <hr> 
 
 ## To run this web-app in your local systems :computer:
